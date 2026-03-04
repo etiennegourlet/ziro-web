@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziro | L'IA au service du tri intelligent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D084;
+            --primary-dark: #00A368;
+            --dark: #0F172A;
+            --slate: #475569;
+            --bg-page: #FBFDFF;
+            --bg-nav: #F9FBF6;
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-page); color: var(--dark); margin: 0; scroll-behavior: smooth; overflow-x: hidden; }
+
+        /* Navigation Fixe */
+        nav {
+            padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 94%;
+            top: 20px; left: 50%; transform: translateX(-50%); background-color: var(--bg-nav);
+            z-index: 1000; border-radius: 24px; border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo-img { height: 45px; width: auto; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 15px; }
+
+        /* Hero Section */
+        .hero { padding: 180px 10% 80px; display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 60px; align-items: start; }
+        h1 { font-size: 58px; font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+        h1 span { color: var(--primary); }
+
+        .stats-bar { display: flex; gap: 30px; margin: 30px 0 50px 0; }
+        .stat-box b { display: block; font-size: 32px; color: var(--primary); }
+        .stat-box span { font-size: 14px; font-weight: 600; color: var(--slate); }
+
+        /* Vidéo Container avec effet Halo */
+        .video-container { margin-top: 40px; width: 100%; position: relative; }
+        .video-label { font-weight: 700; color: var(--primary); margin-bottom: 20px; display: block; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        
+        .video-wrapper {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            /* On force un ratio pour éviter les bandes noires (16:9 ici) */
+            aspect-ratio: 16 / 9; 
+        }
+
+        /* L'effet de halo vert pulsé */
+        .video-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 24px;
+            box-shadow: 0 0 0 0px rgba(0, 208, 132, 0);
+            animation: pulse-halo 3s infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* CORRECTION ICI : Éliminer les bandes noires */
+        .demo-video { 
+            width: 100%; 
+            height: 100%; /* Force la vidéo à remplir toute la hauteur du wrapper */
+            display: block; 
+            border: 4px solid white; 
+            border-radius: 24px; 
+            background: #000; 
+            position: relative; 
+            z-index: 2; 
+            object-fit: cover; /* Remplit l'espace en zoomant légèrement (crop), élimine les bandes */
+            object-position: center; /* Centre la vidéo pour le crop */
+        }
+        
+        @keyframes pulse-halo {
+            0% { box-shadow: 0 0 0 0px rgba(0, 208, 132, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 208, 132, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(0, 208, 132, 0); }
+        }
+
+        /* Compagnon Vidéo */
+        .comp-video { width: 100%; max-width: 400px; border-radius: 20px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1)); }
+
+        /* Témoignages */
+        .testimonials { padding: 100px 10%; background: #F8FAFC; text-align: center; }
+        .t-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 50px; }
+        .t-card { background: white; padding: 40px; border-radius: 32px; text-align: left; border: 1px solid #E2E8F0; }
+        .t-header { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; }
+        .t-avatar { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+
+        /* Contact */
+        .contact { padding: 100px 10%; background: var(--dark); color: white; border-radius: 60px 60px 0 0; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .form-card { background: #1E293B; padding: 50px; border-radius: 40px; position: relative; }
+        
+        input, textarea { width: 100%; padding: 18px; margin-bottom: 20px; border-radius: 12px; border: 2px solid #334155; background: #0F172A; color: white; font-family: inherit; }
+        .btn { background: var(--primary); color: var(--dark); padding: 16px 32px; border-radius: 18px; font-weight: 800; text-decoration: none; border: none; cursor: pointer; display: inline-block; transition: 0.3s; }
+        .btn:hover { background: #00FF9D; transform: scale(1.05); }
+
+        /* Message de succès */
+        #success-msg { 
+            display: none; background: var(--primary); color: var(--dark); 
+            padding: 30px; border-radius: 20px; text-align: center; 
+            font-weight: 800; font-size: 18px; margin-bottom: 20px;
+        }
+
+        @media (max-width: 1024px) { .hero, .contact-grid { grid-template-columns: 1fr; text-align: center; } .nav-links { display: none; } .stats-bar { justify-content: center; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="logo-container">
+        <img src="logo-ziro.png" alt="Logo Ziro" class="logo-img">
+    </a>
+    <div class="nav-links">
+        <a href="#testimonials">Ils nous font confiance</a>
+        <a href="#contact" class="btn" style="padding: 10px 20px; font-size: 14px;">Nous contacter</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-left">
+        <h1>Ne devinez plus. <span>Ziro</span> allume le tri.</h1>
+        <p style="font-size: 20px; color: var(--slate); line-height: 1.5;">Notre IA analyse les déchets et guide vos clients par la lumière. Une solution simple pour protéger votre vaisselle réutilisable.</p>
+        
+        <div class="stats-bar">
+            <div class="stat-box"><b>99.4%</b><span>Précision</span></div>
+            <div class="stat-box"><b>-80%</b><span>Pertes vaisselle</span></div>
+            <div class="stat-box"><b>< 30ms</b><span>Latence</span></div>
+        </div>
+
+        <div class="video-container">
+            <span class="video-label">Démonstration en conditions réelles :</span>
+            <div class="video-wrapper">
+                <video class="demo-video" autoplay loop muted playsinline>
+                    <source src="./demo-ziro.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la vidéo.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-right" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding-top: 50px;">
+        <span class="video-label">Votre assistant intelligent :</span>
+        <video class="comp-video" autoplay loop muted playsinline>
+            <source src="./comp-ziro.mp4" type="video/mp4">
+        </video>
+        <a href="#contact" class="btn" style="margin-top: 40px; width: 100%; text-align: center;">Demander un devis</a>
+    </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+    <h2>Ils nous font confiance.</h2>
+    <div class="t-grid">
+        <div class="t-card">
+            <div class="t-header">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100" class="t-avatar" alt="Pierre">
+                <div class="t-info"><h4>Pierre D.</h4><span>Franchisé McDonald's</span></div>
+            </div>
+            <p style="font-style:italic;">"Réduction de 80% des pertes de vaisselle grâce au guidage lumineux de Ziro."</p>
+        </div>
+        <div class="t-card">
+            <div class="t-header">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100" class="t-avatar" alt="Julie">
+                <div class="t-info"><h4>Julie M.</h4><span>Responsable RSE</span></div>
+            </div>
+            <p style="font-style:italic;">"Les alertes poubelles pleines ont fluidifié le travail de mes équipiers."</p>
+        </div>
+    </div>
+</section>
+
+<section class="contact" id="contact">
+    <div class="contact-grid">
+        <h2>Prêt à optimiser votre restaurant ?</h2>
+        <div class="form-card">
+            <div id="success-msg">Merci ! Ziro a bien reçu votre message. Redirection...</div>
+            <form id="ziro-form" action="https://formspree.io/f/mykdqqwp" method="POST">
+                <input type="text" name="name" placeholder="Nom Complet" required>
+                <input type="email" name="email" placeholder="Email Professionnel" required>
+                <textarea name="message" rows="4" placeholder="Votre message..." required></textarea>
+                <button type="submit" class="btn" style="width:100%">Envoyer la demande</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    const form = document.getElementById('ziro-form');
+    const successMsg = document.getElementById('success-msg');
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = new FormData(form);
+        const response = await fetch
